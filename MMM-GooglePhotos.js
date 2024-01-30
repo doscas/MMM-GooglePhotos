@@ -4,9 +4,9 @@
 //
 Module.register("MMM-GooglePhotos", {
   defaults: {
-    albums: [],
-    updateInterval: 1000 * 30, // minimum 10 seconds.
-    sort: "new", // "old", "random"
+    albums: ["MagicMirror"],
+    updateInterval: 1111 * 30, // minimum 10 seconds.
+    sort: "random", // "old", "random"
     uploadAlbum: null, // Only for created by `create_uploadable_album.js`
     condition: {
       fromDate: null, // Or "2018-03", RFC ... format available
@@ -15,16 +15,16 @@ Module.register("MMM-GooglePhotos", {
       maxWidth: null, // Or 8000
       minHeight: null, // Or 400
       maxHeight: null, // Or 8000
-      minWHRatio: null,
+      minWHRatio: 1,
       maxWHRatio: null,
       // WHRatio = Width/Height ratio ( ==1 : Squared Photo,   < 1 : Portraited Photo, > 1 : Landscaped Photo)
     },
-    showWidth: 1080, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
-    showHeight: 1920,
-    timeFormat: "YYYY/MM/DD HH:mm",
-    autoInfoPosition: false,
+    showWidth: 1280, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
+    showHeight: 960,
+		timeFormat: "ddd DD MMM YYYY HH:mm", // Or `relative` can be used.
+		timeFormat2: "DD",
+		autoInfoPosition: false,
   },
-  requiresVersion: "2.24.0",
 
   suspended: false,
 
@@ -64,16 +64,6 @@ Module.register("MMM-GooglePhotos", {
       if (this.firstScan) {
         this.updatePhotos(); //little faster starting
       }
-    }
-    if (noti === "ERROR") {
-      const current = document.getElementById("GPHOTO_CURRENT");
-      const errMsgDiv = document.createElement("div");
-      errMsgDiv.style.textAlign = "center";
-      errMsgDiv.style.lineHeight = "80vh";
-      errMsgDiv.style.fontSize = "1.5em";
-      errMsgDiv.style.verticalAlign = "middle";
-      errMsgDiv.textContent = payload;
-      current.appendChild(errMsgDiv);
     }
   },
 
@@ -129,7 +119,6 @@ Module.register("MMM-GooglePhotos", {
     hidden.onload = () => {
       let back = document.getElementById("GPHOTO_BACK");
       let current = document.getElementById("GPHOTO_CURRENT");
-      current.textContent = "";
       //current.classList.remove("animated")
       let dom = document.getElementById("GPHOTO");
       back.style.backgroundImage = `url(${url})`;
@@ -161,24 +150,28 @@ Module.register("MMM-GooglePhotos", {
         info.style.setProperty("--bottom", bottom);
         info.style.setProperty("--right", right);
       }
-      info.innerHTML = "";
-      let albumCover = document.createElement("div");
-      albumCover.classList.add("albumCover");
-      albumCover.style.backgroundImage = `url(modules/MMM-GooglePhotos/cache/${album.id})`;
-      let albumTitle = document.createElement("div");
-      albumTitle.classList.add("albumTitle");
-      albumTitle.innerHTML = album.title;
-      let photoTime = document.createElement("div");
-      photoTime.classList.add("photoTime");
-      photoTime.innerHTML = this.config.timeFormat === "relative" ? moment(target.mediaMetadata.creationTime).fromNow() : moment(target.mediaMetadata.creationTime).format(this.config.timeFormat);
-      let infoText = document.createElement("div");
-      infoText.classList.add("infoText");
+      info.innerHTML = ""
+      /* var albumCover = document.createElement("div")
+      albumCover.classList.add("albumCover")
+      albumCover.style.backgroundImage = `url(modules/MMM-GooglePhotos/cache/${album.id})`
+      var albumTitle = document.createElement("div")
+      albumTitle.classList.add("albumTitle")
+      albumTitle.innerHTML = album.title */
+      var photoTime = document.createElement("div")
+      photoTime.classList.add("photoTime")
+      photoTime.innerHTML = (this.config.timeFormat == "relative")
+        ? moment(target.mediaMetadata.creationTime).format(fromNow().config.timeFormat)
+        : moment(target.mediaMetadata.creationTime).format(this.config.timeFormat) + " (" + moment(target.mediaMetadata.creationTime).fromNow() + ")"
 
-      info.appendChild(albumCover);
-      infoText.appendChild(albumTitle);
-      infoText.appendChild(photoTime);
-      info.appendChild(infoText);
-      this.sendSocketNotification("IMAGE_LOADED", { id: target.id, index: this.index });
+      var infoText = document.createElement("div")
+      infoText.classList.add("infoText")
+
+      //info.appendChild(albumCover)
+      //infoText.appendChild(albumTitle)
+      infoText.appendChild(photoTime)
+      info.appendChild(infoText)
+      console.log("[GPHOTO] Image loaded:", url)
+      this.sendSocketNotification("IMAGE_LOADED", url)
     };
     hidden.src = url;
   },

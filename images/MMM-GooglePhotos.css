@@ -1,0 +1,114 @@
+#GPHOTO_INFO {
+  --top: 400;
+  --left: 400;
+  --bottom: 200;
+  --right: 200;
+}
+
+@keyframes trans {
+  from {opacity: 0.5}
+  to {opacity: 1}
+}
+
+.region.fullscreen #GPHOTO {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+
+#GPHOTO {
+  position:relative;
+  min-width: 300px;
+  min-height:300px;
+}
+
+#GPHOTO_CURRENT {
+  background-size:contain;
+  background-repeat:no-repeat;
+  background-position:center;
+  position: absolute;
+  top:0px;
+  left:0px;
+  right:0px;
+  bottom:0px;
+}
+
+#GPHOTO_CURRENT.animated {
+  animation-name: trans;
+  animation-duration: 6s;
+}
+
+#GPHOTO_BACK {
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  filter: blur(10px) sepia(80%) brightness(40%);
+}
+
+#GPHOTO_INFO {
+  position:fixed;
+  /*top: var(--top);
+  left: var(--left);
+  bottom: var(--bottom);
+  right: var(--right);
+  */
+  bottom: 2%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  //margin:10px;
+  /*background-color: rgba(0,0,0,0.1); */
+  //padding: 10px;
+  border-radius: 36px;
+  line-height: 100%;
+  text-align:center;
+}
+
+#GPHOTO_INFO .albumCover {
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background-size:cover;
+  background-repeat:no-repeat;
+  background-position:center;
+  float:left;
+}
+
+#GPHOTO_INFO .albumTitle {
+  color:#FDD;
+}
+
+#GPHOTO_INFO .photoTime {
+  /* color:#DFD; */
+  color:#bbb;
+  text-shadow: 1px 0px #ffffff, 0px -1px #ffffff, -1px 0px #ffffff, 0px 1px #ffffff;
+  text-shadow: 2px 0px 2px #000000, -2px 0px 2px #000000, 0px -2px 2px #000000, 0px 2px 2px #000000;
+  text-align:center;
+  font-size:18px;
+  border: 2px #000000;
+}
+
+#GPHOTO_INFO .infoText {
+  color:#bbb;
+  text-shadow: 1px 0px #ffffff, 0px -1px #ffffff, -1px 0px #ffffff, 0px 1px #ffffff;
+  text-shadow: 2px 0px 2px #000000, -2px 0px 2px #000000, 0px -2px 2px #000000, 0px 2px 2px #000000;
+  text-align:center;
+  font-size:18px;
+  border: 2px #000000;
+  /*
+  float:right;
+  margin-left: 0px;
+  padding-right: 0px;
+  padding-top:6px;
+  font-size:18px;
+  line-height:100%;
+  color:#FFF;
+  */
+}
